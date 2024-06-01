@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#Bash script that displays numbers from 1 to 100
 i=1
 while [ $i -le 100 ]
 do
@@ -16,3 +17,4 @@ do
   fi
   i=$((i + 1))
 done
+
