@@ -18,8 +18,12 @@ stop() {
 }
 
 restart() {
-    stop
-    start
+    if [ -e /var/run/my_process.pid ]; then
+        kill "$(cat /var/run/my_process.pid)"
+        rm /var/run/my_process.pid
+    fi
+    ./manage_my_process.sh &
+    echo $! > /var/run/my_process.pid
     echo "manage_my_process restarted"
 }
 
@@ -34,7 +38,7 @@ case "$1" in
         restart
         ;;
     *)
-        echo "Usage: 11-manage_my_process {start|stop|restart}"
+        echo "Usage: manage_my_process {start|stop|restart}"
         exit 1
         ;;
 esac
