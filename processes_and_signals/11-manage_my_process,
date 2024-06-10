@@ -1,45 +1,16 @@
 #!/usr/bin/env bash
-# Manage my_process
+# bash script that creates a file with pid 
+sudo bash -c "echo $$ > /var/run/myscript.pid"
 
-start_my_process() {
-  ./manage_my_process &
-  echo "$!" > /var/run/my_process.pid
-}
+# Define trap handlers for signals
+trap 'echo "Y U no love me?!"' SIGINT
+trap 'echo "I hate the kill command"; sudo rm -f /var/run/myscript.pid; exit' SIGTERM
+trap 'sudo rm -f /var/run/myscript.pid; exit' SIGQUIT
 
-stop_my_process() {
-  if test -f "/var/run/my_process.pid"
-  then
-    kill "$(cat /var/run/my_process.pid)"
-    rm -f /var/run/my_process.pid
-  fi
-}
-
-restart_my_process() {
-  stop_my_process
-  start_my_process
-}
-
-print_usage() {
-  echo "Usage: manage_my_process {start|stop|restart}"
-}
-
-if [[ "$#" == "1" ]]
-then
-  if [[ "$1" == "start" ]]
-  then
-    start_my_process
-    echo "manage_my_process started"
-  elif [[ "$1" == "stop" ]]
-  then
-    stop_my_process
-    echo "manage_my_process stopped"
-  elif [[ "$1" == "restart" ]]; then 
-    restart_my_process
-    echo "manage_my_process restarted"
-  else
-    print_usage
-  fi
-else
-  print_usage
-fi
+# Infinite loop
+while :
+do
+    echo "To infinity and beyond"
+    sleep 2
+done
 

@@ -1,45 +1,13 @@
 #!/usr/bin/env bash
-# Manage my_process
+#Write to /tmp/my_process indefinitely
 
-start_my_process() {
-  ./manage_my_process &
-  echo "$!" > /var/run/my_process.pid
-}
+sleep() {
+! read -rt "$1"
+} <> <(:)
 
-stop_my_process() {
-  if test -f "/var/run/my_process.pid"
-  then
-    kill "$(cat /var/run/my_process.pid)"
-    rm -f /var/run/my_process.pid
-  fi
-}
-
-restart_my_process() {
-  stop_my_process
-  start_my_process
-}
-
-print_usage() {
-  echo "Usage: manage_my_process {start|stop|restart}"
-}
-
-if [[ "$#" == "1" ]]
-then
-  if [[ "$1" == "start" ]]
-  then
-    start_my_process
-    echo "manage_my_process started"
-  elif [[ "$1" == "stop" ]]
-  then
-    stop_my_process
-    echo "manage_my_process stopped"
-  elif [[ "$1" == "restart" ]]; then 
-    restart_my_process
-    echo "manage_my_process restarted"
-  else
-    print_usage
-  fi
-else
-  print_usage
-fi
+while true
+do
+  echo 'I am alive!'
+  sleep 2
+done > "${TMPDIR:-/tmp}/my_process"
 
